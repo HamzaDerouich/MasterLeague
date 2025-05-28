@@ -1,6 +1,3 @@
-Aquí tienes un archivo `README.md` profesional y completo para tu proyecto MasterLeague:
-
-```markdown
 # ⚽ MasterLeague - Football Hub App
 
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
