@@ -22,6 +22,20 @@ import com.example.app2.adapter.GoleadoresAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragmento que muestra las estadísticas de máximos goleadores de una liga.
+ *
+ * Funcionalidades principales:
+ * - Recibe el ID de la liga y la temporada como argumentos.
+ * - Solicita a la API la lista de máximos goleadores usando FootballDataService.
+ * - Muestra los goleadores en un RecyclerView usando GoleadoresAdapter.
+ * - Muestra un ProgressBar mientras se cargan los datos.
+ * - Muestra un mensaje de error si la carga falla.
+ *
+ * Uso típico:
+ * - Se utiliza dentro de una actividad o ViewPager para mostrar las estadísticas de una liga seleccionada.
+ * - Se instancia usando el método estático newInstance(int leagueId, int season).
+ */
 public class EstadisticasFragment extends Fragment {
 
     private static final String ARG_LEAGUE_ID = "league_id";
@@ -34,6 +48,12 @@ public class EstadisticasFragment extends Fragment {
     private ProgressBar progressBar;
     private GoleadoresAdapter adapter;
 
+    /**
+     * Crea una nueva instancia del fragmento con los argumentos necesarios.
+     * @param leagueId ID de la liga.
+     * @param season Temporada.
+     * @return Instancia de EstadisticasFragment.
+     */
     public static EstadisticasFragment newInstance(int leagueId, int season) {
         EstadisticasFragment fragment = new EstadisticasFragment();
         Bundle args = new Bundle();
@@ -64,17 +84,22 @@ public class EstadisticasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setupRecyclerView();
         loadTopScorers();
     }
 
+    /**
+     * Configura el RecyclerView y su adaptador.
+     */
     private void setupRecyclerView() {
-        adapter = new GoleadoresAdapter(null);
+        adapter = new GoleadoresAdapter(new ArrayList<>());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Solicita la lista de máximos goleadores a la API y actualiza la interfaz según el resultado.
+     */
     private void loadTopScorers() {
         progressBar.setVisibility(View.VISIBLE);
 

@@ -18,13 +18,26 @@ import com.example.app2.adapter.GoleadoresAdapter;
 import com.example.app2.adapter.LigasGoleadoresAdapter;
 import com.example.app2.api.FootballDataService;
 import com.example.app2.api.footballDataServiceInterfaces.MaximosGoleadoresCallBack;
+import com.example.app2.api.footballDataServiceInterfaces.LigasCallback;
 import com.example.app2.model.GoleadorModel;
 import com.example.app2.model.LigaModel;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Fragmento que muestra la sección de máximos goleadores por liga.
+ *
+ * Funcionalidades principales:
+ * - Solicita la lista de ligas a la API usando FootballDataService y las muestra en un carrusel horizontal (RecyclerView).
+ * - Permite al usuario seleccionar una liga del carrusel para ver sus máximos goleadores.
+ * - Solicita a la API la lista de máximos goleadores de la liga seleccionada y los muestra en un RecyclerView vertical.
+ * - Muestra un ProgressBar mientras se cargan los datos.
+ * - Gestiona errores mostrando mensajes mediante Toast.
+ *
+ * Uso típico:
+ * - Se utiliza en la sección de estadísticas o goleadores de la app para consultar los máximos goleadores de cada liga.
+ * - El usuario puede cambiar de liga usando el carrusel y ver los goleadores actualizados.
+ */
 public class SecctionGoleadoresFragment extends Fragment {
 
     private int leagueId = 61; // ID por defecto (LaLiga)
@@ -37,9 +50,12 @@ public class SecctionGoleadoresFragment extends Fragment {
     private GoleadoresAdapter goleadoresAdapter;
 
     public SecctionGoleadoresFragment() {
-        // Required empty public constructor
+        // Constructor vacío requerido
     }
 
+    /**
+     * Crea una nueva instancia del fragmento.
+     */
     public static SecctionGoleadoresFragment newInstance() {
         return new SecctionGoleadoresFragment();
     }
@@ -47,8 +63,8 @@ public class SecctionGoleadoresFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Cambiamos el layout por uno adecuado
-        return inflater.inflate(R.layout.fragment_goleadores, container, false);
+        // Infla el layout del fragmento
+        return inflater.inflate(R.layout.fragment_secction_goleadores, container, false);
     }
 
     @Override
@@ -64,6 +80,9 @@ public class SecctionGoleadoresFragment extends Fragment {
         cargarLigas();
     }
 
+    /**
+     * Configura el RecyclerView horizontal para mostrar las ligas.
+     */
     private void setupLigasRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 requireContext(),
@@ -71,9 +90,6 @@ public class SecctionGoleadoresFragment extends Fragment {
                 false
         );
         rvLigas.setLayoutManager(layoutManager);
-
-        // Efecto snap para el carrusel
-        new GravitySnapHelper(GravitySnapHelper.GRAVITY_START).attachToRecyclerView(rvLigas);
 
         ligasAdapter = new LigasGoleadoresAdapter(requireContext(), (liga, position) -> {
             leagueId = liga.getId();
@@ -83,40 +99,58 @@ public class SecctionGoleadoresFragment extends Fragment {
         rvLigas.setAdapter(ligasAdapter);
     }
 
+    /**
+     * Configura el RecyclerView vertical para mostrar los goleadores.
+     */
     private void setupGoleadoresRecyclerView() {
         rvGoleadores.setLayoutManager(new LinearLayoutManager(requireContext()));
         goleadoresAdapter = new GoleadoresAdapter(new ArrayList<>());
         rvGoleadores.setAdapter(goleadoresAdapter);
     }
 
+    /**
+     * Solicita la lista de ligas a la API y actualiza el carrusel.
+     */
     private void cargarLigas() {
         progressBar.setVisibility(View.VISIBLE);
         FootballDataService service = new FootballDataService(requireContext());
-        service.obtenerLigas(ligas -> {
-            requireActivity().runOnUiThread(() -> {
-                progressBar.setVisibility(View.GONE);
-                if (ligas != null && !ligas.isEmpty()) {
-                    ligasAdapter.setLigas(ligas);
-                    // Cargar goleadores de la primera liga por defecto
-                    leagueId = ligas.get(0).getId();
-                    cargarGoleadores();
-                }
-            });
-        }, error -> {
-            requireActivity().runOnUiThread(() -> {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(requireContext(), "Error al cargar ligas: " + error, Toast.LENGTH_SHORT).show();
-            });
+        service.obtenerLigas(new LigasCallback() {
+            @Override
+            public void onSuccess(ArrayList<LigaModel> ligas) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (ligas != null && !ligas.isEmpty()) {
+                        ligasAdapter.setLigas(ligas);
+                        // Cargar goleadores de la primera liga por defecto
+                        leagueId = ligas.get(0).getId();
+                        cargarGoleadores();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "Error al cargar ligas: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
         });
     }
 
+    /**
+     * Solicita la lista de máximos goleadores de la liga seleccionada a la API y actualiza la interfaz.
+     */
     private void cargarGoleadores() {
         progressBar.setVisibility(View.VISIBLE);
         FootballDataService service = new FootballDataService(requireContext());
         service.obtenerMaximosGoleadores(leagueId, season, new MaximosGoleadoresCallBack() {
             @Override
             public void onSuccess(ArrayList<GoleadorModel> goleadores) {
-                requireActivity().runOnUiThread(() -> {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     goleadoresAdapter.updateData(goleadores);
                 });
@@ -124,7 +158,8 @@ public class SecctionGoleadoresFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-                requireActivity().runOnUiThread(() -> {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Error al cargar goleadores: " + error, Toast.LENGTH_SHORT).show();
                 });

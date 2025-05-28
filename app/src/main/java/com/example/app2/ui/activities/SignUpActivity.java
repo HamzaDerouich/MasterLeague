@@ -1,4 +1,4 @@
-package com.example.app2.ui;
+package com.example.app2.ui.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +15,23 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app2.R;
 import com.example.app2.data.UsuarioRepository;
-import com.example.app2.model.Usuario;
+import com.example.app2.model.UsuarioModel;
 
+/**
+ * Actividad de registro de usuario para la aplicación MasterLeague.
+ *
+ * Funcionalidades principales:
+ * - Permite al usuario crear una nueva cuenta ingresando nombre, email y contraseña.
+ * - Valida los campos de entrada (no vacíos, formato de email, longitud mínima de contraseña, coincidencia de contraseñas).
+ * - Verifica que el nombre de usuario no esté ya registrado.
+ * - Registra el usuario en la base de datos local usando UsuarioRepository.
+ * - Muestra mensajes de éxito o error mediante AlertDialog o Toast.
+ * - Permite volver atrás con el botón "signup" (cancelar registro).
+ *
+ * Uso típico:
+ * - El usuario accede a esta pantalla desde el login para crear una nueva cuenta.
+ * - Si el registro es exitoso, se muestra un mensaje de bienvenida y de verificación por correo.
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     UsuarioRepository accesoDatos;
@@ -28,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
+
+        // Ajusta los insets para la barra de estado y navegación
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -42,16 +59,17 @@ public class SignUpActivity extends AppCompatActivity {
         login = findViewById(R.id.buttonLoginRegistro);
         signup = findViewById(R.id.buttonSignUpRegistro);
 
+        // Botón para registrar usuario
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-
                 String nombreString = nombre.getText().toString().trim();
                 String emailString = email.getText().toString().trim();
                 String passwordString = password.getText().toString().trim();
                 String passwordValidationString = passwordValidation.getText().toString().trim();
 
+                // Validaciones de campos
                 if (nombreString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty() || passwordValidationString.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Rellene todos los campos para continuar.", Toast.LENGTH_SHORT).show();
                     return;
@@ -72,15 +90,15 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                Usuario usuario = new Usuario(nombreString, emailString, passwordString);
-                Usuario existeUsuario = accesoDatos.ConsultarUsuario(usuario.getNombre());
+                UsuarioModel usuario = new UsuarioModel(nombreString, emailString, passwordString);
+                UsuarioModel existeUsuario = accesoDatos.consultarUsuario(usuario.getNombre());
 
                 if (existeUsuario != null) {
                     Mensaje("¡Registro erróneo!", "El usuario con el nombre " + nombreString + " ya existe. Por favor, elija otro nombre.");
                     return;
                 }
 
-                boolean registroExitoso = accesoDatos.RegistrarUsuario(usuario);
+                boolean registroExitoso = accesoDatos.registrarUsuario(usuario);
 
                 if (registroExitoso) {
                     Mensaje("¡Registro exitoso!", "Usuario registrado con el nombre " + nombreString + ". ¡Bienvenido! Hemos enviado un correo de verificación a tu dirección de email.");
@@ -90,6 +108,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        // Botón para cancelar y volver atrás
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -99,6 +118,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * Muestra un mensaje de alerta personalizado.
+     * @param titulo Título del mensaje.
+     * @param mensaje Contenido del mensaje.
+     */
     public void Mensaje(String titulo, String mensaje)
     {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);

@@ -15,7 +15,10 @@
     <color name="textColorSecondary">#B2FF59</color>
 
     <!-- Bottom Navigation and Navigation Drawer Colores -->
-
+    <color name="cardHighlight">#FFF8E1</color>
+    <color name="gold">#FFD700</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="bronze">#CD7F32</color>
     <color name="bottomNavColor">#33691E</color>
     <color name="sheetBackgroundColor">#4CAF50</color>
     <color name="black">#FF000000</color>
@@ -25,5 +28,16 @@
     <color name="green_one">#0D7C66</color>
     <color name="green_two">#3C552D</color>
     <color name="purple">#4B4376</color>
-    
+    <color name="grey_light">#E0E0E0</color>
+    <color name="grey_dark">#757575</color>
+    <color name="toolbar_dark">#FF1A1A2E</color>  <!-- Azul muy oscuro -->
+    <color name="white_60">#99FFFFFF</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+    <color name="background">#FAFAFA</color>
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#757575</color>
+    <color name="cardBackground">#FFFFFF</color>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.app2.model;
 
-public class Noticia
-{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class NoticiaModel implements Parcelable {
     private String author;
     private String title;
     private String description;
@@ -13,12 +15,14 @@ public class Noticia
     private String country;
     private String published_at;
 
-    // Constructor vacio
-   public Noticia()
-   {
+    // Constructor vacío
+    public NoticiaModel() {
+    }
 
-   }
-    public Noticia(String author, String title, String description, String url, String source, String image, String category, String language, String country, String published_at) {
+    // Constructor con parámetros
+    public NoticiaModel(String author, String title, String description, String url,
+                        String source, String image, String category, String language,
+                        String country, String published_at) {
         this.author = author;
         this.title = title;
         this.description = description;
@@ -31,9 +35,52 @@ public class Noticia
         this.published_at = published_at;
     }
 
-    // Getters and Setters
+    // Constructor Parcelable
+    protected NoticiaModel(Parcel in) {
+        author = in.readString();
+        title = in.readString();
+        description = in.readString();
+        url = in.readString();
+        source = in.readString();
+        image = in.readString();
+        category = in.readString();
+        language = in.readString();
+        country = in.readString();
+        published_at = in.readString();
+    }
 
+    public static final Creator<NoticiaModel> CREATOR = new Creator<NoticiaModel>() {
+        @Override
+        public NoticiaModel createFromParcel(Parcel in) {
+            return new NoticiaModel(in);
+        }
 
+        @Override
+        public NoticiaModel[] newArray(int size) {
+            return new NoticiaModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(author);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeString(source);
+        dest.writeString(image);
+        dest.writeString(category);
+        dest.writeString(language);
+        dest.writeString(country);
+        dest.writeString(published_at);
+    }
+
+    // Getters y Setters (se mantienen igual que en tu versión original)
     public String getAuthor() {
         return author;
     }
@@ -113,6 +160,4 @@ public class Noticia
     public void setPublished_at(String published_at) {
         this.published_at = published_at;
     }
-
-
 }

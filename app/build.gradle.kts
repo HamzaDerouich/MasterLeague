@@ -1,15 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.app2"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.app2"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -32,15 +33,20 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat)
+
+
     implementation(libs.material)
-    implementation(libs.activity)
+    implementation(libs.appcompat)
     implementation(libs.constraintlayout)
+    implementation(libs.activity)
 
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.glide)
+    implementation(libs.volley)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

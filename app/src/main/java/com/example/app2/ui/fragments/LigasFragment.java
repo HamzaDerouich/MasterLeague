@@ -14,20 +14,37 @@ import androidx.fragment.app.Fragment;
 
 import com.example.app2.R;
 import com.example.app2.adapter.CompeticionesAdapter;
-import com.example.app2.api.FootballApiService;
-import com.example.app2.model.Liga;
-import com.example.app2.ui.InfoLigaActivity;
+import com.example.app2.api.FootballDataService;
+import com.example.app2.api.footballDataServiceInterfaces.LigasCallback;
+import com.example.app2.model.LigaModel;
+import com.example.app2.ui.activities.DetallesLigaActivity;
+import com.example.app2.ui.activities.InfoLigaActivity;
 
 import java.util.ArrayList;
 
-public class Ligas extends Fragment {
+/**
+ * Fragmento que muestra la lista de ligas disponibles en la aplicación.
+ *
+ * Funcionalidades principales:
+ * - Solicita la lista de ligas a la API usando FootballDataService.
+ * - Muestra las ligas en un ListView usando CompeticionesAdapter.
+ * - Muestra un ProgressBar mientras se cargan los datos.
+ * - Permite al usuario pulsar sobre una liga para ver sus detalles en DetallesLigaActivity.
+ * - Gestiona errores mostrando mensajes mediante Toast.
+ * - Utiliza un caché local (cacheLigas) para almacenar temporalmente las ligas cargadas.
+ *
+ * Uso típico:
+ * - Se utiliza en la sección de ligas de la app para mostrar todas las competiciones disponibles.
+ * - Al pulsar una liga, se navega a la pantalla de detalles de esa liga.
+ */
+public class LigasFragment extends Fragment {
 
     private ListView listView;
     private ProgressBar progressBar;
     private CompeticionesAdapter adapter;
-    private ArrayList<Liga> cacheLigas = new ArrayList<>();
+    private ArrayList<LigaModel> cacheLigas = new ArrayList<>();
 
-    public Ligas() {
+    public LigasFragment() {
         // Constructor vacío
     }
 
@@ -46,8 +63,8 @@ public class Ligas extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Liga liga = cacheLigas.get(position);
-                Intent intent = new Intent(getContext(), InfoLigaActivity.class);
+                LigaModel liga = cacheLigas.get(position);
+                Intent intent = new Intent(getContext(), DetallesLigaActivity.class);
                 intent.putExtra("liga", liga);
                 startActivity(intent);
             }
@@ -56,17 +73,17 @@ public class Ligas extends Fragment {
         return rootView;
     }
 
-
-
+    /**
+     * Solicita la lista de ligas a la API y actualiza la interfaz según el resultado.
+     */
     private void cargarLigas() {
-
         progressBar.setVisibility(View.VISIBLE);
         cacheLigas.clear();
 
-        FootballApiService api = new FootballApiService(getContext());
-        api.obtenerLigas(new FootballApiService.LigasCallback() {
+        FootballDataService api = new FootballDataService(getContext());
+        api.obtenerLigas(new LigasCallback() {
             @Override
-            public void onSuccess(ArrayList<Liga> ligas) {
+            public void onSuccess(ArrayList<LigaModel> ligas) {
                 progressBar.setVisibility(View.GONE);
                 cacheLigas.addAll(ligas);
                 adapter.notifyDataSetChanged();
@@ -79,8 +96,5 @@ public class Ligas extends Fragment {
                 // Puedes cargar datos locales de respaldo aquí si lo deseas
             }
         });
-
-
-
     }
 }

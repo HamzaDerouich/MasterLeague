@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.app2.R;
 import com.example.app2.adapter.NoticiaAdapter;
@@ -17,7 +17,20 @@ import com.example.app2.model.NoticiaModel;
 
 import java.util.ArrayList;
 
-public class NoticiasInfoFragment extends Fragment {
+/**
+ * Fragmento que muestra la lista de noticias deportivas en la aplicación.
+ *
+ * Funcionalidades principales:
+ * - Solicita la lista de noticias deportivas a la API usando NewsDataService.
+ * - Muestra las noticias en un ListView usando NoticiaAdapter.
+ * - Permite al usuario pulsar sobre una noticia para ver su detalle en DetalleNoticiaFragment.
+ * - Gestiona errores mostrando mensajes mediante Toast.
+ *
+ * Uso típico:
+ * - Se utiliza en la sección de noticias de la app para mostrar las noticias deportivas más recientes.
+ * - Al pulsar una noticia, se navega al detalle de esa noticia dentro de la misma actividad.
+ */
+public class NoticiasFragment extends Fragment {
 
     private ListView listView;
     private ArrayList<NoticiaModel> listadoNoticias = new ArrayList<>();
@@ -35,18 +48,20 @@ public class NoticiasInfoFragment extends Fragment {
 
         listView.setOnItemClickListener((adapterView, view, position, id) -> {
             NoticiaModel noticia = listadoNoticias.get(position);
-            NoticiaDetalleFragment detalleFragment = NoticiaDetalleFragment.newInstance(noticia);
+            DetalleNoticiaFragment detalleFragment = DetalleNoticiaFragment.newInstance(noticia);
 
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main, detalleFragment)
                     .addToBackStack(null)
                     .commit();
-
         });
 
         return rootView;
     }
 
+    /**
+     * Solicita la lista de noticias deportivas a la API y actualiza la interfaz según el resultado.
+     */
     private void obtenerNoticiasDeportivas() {
         NewsDataService newsApi = new NewsDataService(getContext());
         newsApi.obtenerNoticias(new NewsDataService.NewsCallback() {

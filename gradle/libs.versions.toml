@@ -1,27 +1,35 @@
 [versions]
-agp = "8.6.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-appcompat = "1.7.0"
+agp = "8.9.1"
+kotlin = "1.9.22"
 material = "1.12.0"
-activity = "1.9.3"
-constraintlayout = "2.2.0"
+activity = "1.10.1"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+# Material Components
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
-gson = "com.squareup.retrofit2:converter-gson:2.9.0"
-okhttp = "com.squareup.okhttp3:logging-interceptor:4.9.0"
-glide = "com.github.bumptech.glide:glide:4.13.0"
 
+# AndroidX
+appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
+activity = { group = "androidx.activity", name = "activity-ktx", version = "1.9.0" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.0-alpha13" }
+
+# Networking
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
+gson = { group = "com.squareup.retrofit2", name = "converter-gson", version = "2.9.0" }
+okhttp = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.12.0" }
+
+# Otros
+glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
+volley = { group = "com.android.volley", name = "volley", version = "1.2.1" }
+
+# Testing
+junit = { group = "junit", name = "junit", version = "4.13.2" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.5.1" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

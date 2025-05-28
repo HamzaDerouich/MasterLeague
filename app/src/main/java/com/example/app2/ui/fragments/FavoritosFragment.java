@@ -1,66 +1,89 @@
 package com.example.app2.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.app2.R;
+import com.example.app2.adapter.LigasGoleadoresAdapter;
+import com.example.app2.data.FavoritosRepository;
+import com.example.app2.model.FavoritoLigaModel;
+import com.example.app2.model.LigaModel;
+import com.example.app2.ui.activities.DetallesLigaActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoritosFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragmento que muestra la lista de ligas favoritas del usuario.
+ *
+ * Funcionalidades principales:
+ * - Obtiene las ligas favoritas almacenadas en la base de datos local usando FavoritosRepository.
+ * - Convierte los favoritos a objetos LigaModel para su visualización.
+ * - Muestra las ligas favoritas en un RecyclerView horizontal usando LigasGoleadoresAdapter.
+ * - Permite al usuario pulsar sobre una liga para ver sus detalles en DetallesLigaActivity.
+ * - Muestra mensajes de depuración en el log y permite mostrar un mensaje si no hay favoritos.
+ *
+ * Uso típico:
+ * - Se utiliza en la sección de favoritos de la app para mostrar rápidamente las ligas marcadas como favoritas por el usuario.
  */
 public class FavoritosFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rvFavoritos;
+    private LigasGoleadoresAdapter adapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FavoritosFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoritosFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoritosFragment newInstance(String param1, String param2) {
-        FavoritosFragment fragment = new FavoritosFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_favoritos, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rvFavoritos = view.findViewById(R.id.rv_favoritos);
+        rvFavoritos.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        FavoritosRepository repo = new FavoritosRepository(getContext());
+        List<FavoritoLigaModel> favoritos = repo.obtenerFavoritos();
+
+        // Log para depuración
+        Log.d("FavoritosFragment", "Favoritos encontrados: " + favoritos.size());
+
+        List<LigaModel> ligas = new ArrayList<>();
+        for (FavoritoLigaModel fav : favoritos) {
+            LigaModel liga = new LigaModel();
+            liga.setId(fav.getLigaId());
+            liga.setName(fav.getNombre());
+            liga.setLogo(fav.getLogoUrl());
+            ligas.add(liga);
+        }
+
+        // Log para depuración
+        Log.d("FavoritosFragment", "Ligas convertidas: " + ligas.size());
+
+        adapter = new LigasGoleadoresAdapter(getContext(), (liga, pos) -> {
+            // Abrir detalles de liga al pulsar
+            Intent intent = new Intent(getContext(), DetallesLigaActivity.class);
+            intent.putExtra("liga", liga); // LigaModel debe ser Parcelable
+            startActivity(intent);
+        });
+        adapter.setLigas(ligas);
+        rvFavoritos.setAdapter(adapter);
+
+        // Mostrar mensaje si no hay favoritos
+        if (ligas.isEmpty()) {
+            // Puedes mostrar un mensaje en pantalla si lo deseas
+            Log.d("FavoritosFragment", "No hay ligas favoritas para mostrar.");
+        }
     }
 }

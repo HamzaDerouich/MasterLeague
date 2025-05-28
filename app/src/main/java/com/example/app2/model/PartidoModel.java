@@ -2,7 +2,7 @@ package com.example.app2.model;
 
 import java.io.Serializable;
 
-public class Partido implements Serializable {
+public class PartidoModel implements Serializable {
 
     private String resultado;
     private int imagen;
@@ -10,7 +10,7 @@ public class Partido implements Serializable {
     private String goleadores;
 
     // Constructor con parámetros
-    public Partido(String resultado, int imagen, String descripcion, String goleadores) {
+    public PartidoModel(String resultado, int imagen, String descripcion, String goleadores) {
         this.resultado = resultado;
         this.imagen = imagen;
         this.descripcion = descripcion;

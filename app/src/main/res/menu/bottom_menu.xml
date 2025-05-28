@@ -1,28 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/Ligas"
+        android:id="@+id/bottom_nav_ligas"
         android:icon="@drawable/baseline_sports_score_24"
         android:title="Ligas" />
-
     <item
-        android:id="@+id/Partidos"
-        android:title="Partidos"
-        android:icon="@drawable/baseline_sports_soccer_24"/>
-
+        android:id="@+id/bottom_nav_partidos"
+        android:icon="@drawable/baseline_sports_soccer_24"
+        android:title="Partidos" />
     <item
-        android:id="@+id/Noticias"
+        android:id="@+id/bottom_nav_noticias"
         android:icon="@drawable/baseline_newspaper_24"
         android:title="Noticias" />
+    <item
+        android:id="@+id/bottom_nav_goleadores"
+        android:icon="@drawable/baseline_rocket_24"
+        android:title="Goleadores" />
 
     <item
-        android:id="@+id/Goleadores"
-        android:title="Goleadores"
-        android:icon="@drawable/baseline_rocket_24" />
-
-    <item
-        android:id="@+id/Salir"
-        android:icon="@drawable/salida"
+        android:id="@+id/bottom_nav_salir"
+        android:icon="@drawable/baseline_logout_24"
         android:title="Salir" />
 </menu>

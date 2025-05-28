@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.PartidosPasadosFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/matches_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/imageViewDataNoAviable"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_empty_state"
+        android:visibility="gone"
+        android:contentDescription="@string/no_data_available" />
+
+    <Button
+        android:id="@+id/load_more_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cargar más"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
+</LinearLayout>

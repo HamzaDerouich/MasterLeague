@@ -10,18 +10,22 @@
     tools:context=".MainActivity"
     tools:openDrawer="start">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/barrabusqueda"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimaryDark"
             android:theme="@style/ThemeOverlay.AppCompat.Dark" />
-
 
         <FrameLayout
             android:id="@+id/main"
@@ -30,17 +34,20 @@
             android:layout_weight="1">
         </FrameLayout>
 
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:menu="@menu/bottom_menu"
-            app:itemIconTint="@color/colorPrimary"
-            app:itemTextColor="@color/colorPrimary" />
+            app:labelVisibilityMode="labeled"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@drawable/bottom_nav_colors_futbol"
+            app:itemTextColor="@drawable/bottom_nav_colors_futbol"
+            app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+            app:itemTextAppearanceInactive="@style/BottomNavigationView.Inactive"/>
 
     </LinearLayout>
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

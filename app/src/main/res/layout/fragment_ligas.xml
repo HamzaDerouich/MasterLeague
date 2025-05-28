@@ -4,14 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    tools:context=".Ligas">
+    tools:context=".ui.fragments.LigasFragment">
 
+    <!-- ProgressBar para mostrar durante la carga -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- ListView para mostrar las ligas -->
     <ListView
+        android:id="@+id/listViwLigas"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViwLigas"
-        tools:listitem="@layout/filas_lista"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10.0sp" />
+        android:dividerHeight="10dp"
+        tools:listitem="@layout/filas_lista" />
+
+    <!-- TextView para mensajes de error -->
+    <TextView
+        android:id="@+id/txtError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/green_two"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </FrameLayout>
